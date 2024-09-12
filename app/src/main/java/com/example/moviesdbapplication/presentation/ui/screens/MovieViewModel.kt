@@ -40,6 +40,7 @@ class MovieViewModel @Inject constructor(
 
     private val _popularMoviesList = MutableStateFlow<List<ResultResponse>>(emptyList())
     val popularMoviesList: StateFlow<List<ResultResponse>> = _popularMoviesList
+    var isLoadedPopular: Boolean = false
 
     /*now playing movies variables*/
     private val _nowPlayingMoviesState =
@@ -47,9 +48,8 @@ class MovieViewModel @Inject constructor(
 
     private val _nowPlayingMoviesList = MutableStateFlow<List<ResultResponse>>(emptyList())
     val nowPlayingMoviesList: StateFlow<List<ResultResponse>> = _nowPlayingMoviesList
+    var isLoadedNowPlaying: Boolean = false
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
 
     /*upcoming movies variables*/
     private val _upcomingMoviesState =
@@ -57,7 +57,11 @@ class MovieViewModel @Inject constructor(
 
     private val _upcomingMoviesList = MutableStateFlow<List<ResultResponse>>(emptyList())
     val upcomingMoviesList: StateFlow<List<ResultResponse>> = _upcomingMoviesList
+    var isLoadedUpcoming: Boolean = false
 
+    /*loading progress for loading state*/
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
     private fun setLoading() {
         _getMoviesState.value = GetMoviesActivityState.IsLoading(true)
     }
@@ -172,21 +176,25 @@ class MovieViewModel @Inject constructor(
             is GetMoviesActivityState.Init -> Unit
 
             is GetMoviesActivityState.IsLoading -> {
-                /* Show loading UI */
                 setLoading()
             }
 
-            is GetMoviesActivityState.Success -> { /* Update UI with movies */
+            is GetMoviesActivityState.Success -> {
                 _getMoviesState.value = GetMoviesActivityState.IsLoading(false)
                 _upcomingMoviesState.value = GetMoviesActivityState.Success(
                     state.data
                 )
+                isLoadedUpcoming = true
             }
 
-            is GetMoviesActivityState.Error -> { /* Show error message */
+            is GetMoviesActivityState.Error -> {
+                isLoadedUpcoming = false
+
             }
 
-            is GetMoviesActivityState.ShowToast -> {}
+            is GetMoviesActivityState.ShowToast -> {
+                isLoadedUpcoming = false
+            }
         }
     }
 
@@ -196,21 +204,24 @@ class MovieViewModel @Inject constructor(
             is GetMoviesActivityState.Init -> Unit
 
             is GetMoviesActivityState.IsLoading -> {
-                /* Show loading UI */
                 setLoading()
             }
 
-            is GetMoviesActivityState.Success -> { /* Update UI with movies */
+            is GetMoviesActivityState.Success -> {
                 _getMoviesState.value = GetMoviesActivityState.IsLoading(false)
                 _popularMoviesState.value = GetMoviesActivityState.Success(
                     state.data
                 )
+                isLoadedPopular = true
+
             }
 
-            is GetMoviesActivityState.Error -> { /* Show error message */
+            is GetMoviesActivityState.Error -> {
             }
 
-            is GetMoviesActivityState.ShowToast -> {}
+            is GetMoviesActivityState.ShowToast -> {
+
+            }
         }
     }
 
@@ -224,14 +235,18 @@ class MovieViewModel @Inject constructor(
                 setLoading()
             }
 
-            is GetMoviesActivityState.Success -> { /* Update UI with movies */
+            is GetMoviesActivityState.Success -> {
+                /* Update UI with movies */
                 _getMoviesState.value = GetMoviesActivityState.IsLoading(false)
                 _nowPlayingMoviesState.value = GetMoviesActivityState.Success(
                     state.data
                 )
+                isLoadedNowPlaying = true
+
             }
 
-            is GetMoviesActivityState.Error -> { /* Show error message */
+            is GetMoviesActivityState.Error -> {
+                /* Show error message */
             }
 
             is GetMoviesActivityState.ShowToast -> {}
@@ -248,7 +263,6 @@ class MovieViewModel @Inject constructor(
             ?: popularMoviesList.value.find { it.id == id }
             ?: nowPlayingMoviesList.value.find { it.id == id }
     }
-
 
 
     sealed class GetMoviesActivityState {

@@ -36,8 +36,10 @@ fun MovieListScreen(
     when (selectedTabIndex) {
         0 -> {
             LaunchedEffect(Unit) {
-                movieViewModel.getUpcomingMovies().collect { state ->
-                    movieViewModel.handleStateUpcomingMovies(state)
+                if (movieViewModel.isLoadedUpcoming.not()) {
+                    movieViewModel.getUpcomingMovies().collect { state ->
+                        movieViewModel.handleStateUpcomingMovies(state)
+                    }
                 }
             }
             MovieList(movies = upcomingMovies, onMovieClick = { movie ->
@@ -47,8 +49,10 @@ fun MovieListScreen(
 
         1 -> {
             LaunchedEffect(Unit) {
-                movieViewModel.getPopularMovies().collect { state ->
-                    movieViewModel.handleStatePopularMovies(state)
+                if (movieViewModel.isLoadedPopular.not()) {
+                    movieViewModel.getPopularMovies().collect { state ->
+                        movieViewModel.handleStatePopularMovies(state)
+                    }
                 }
             }
             MovieList(movies = popularMovies, onMovieClick = { movie ->
@@ -58,8 +62,10 @@ fun MovieListScreen(
 
         2 -> {
             LaunchedEffect(Unit) {
-                movieViewModel.getNowPlayingMovies().collect { state ->
-                    movieViewModel.handleStateNowPlayingMovies(state)
+                if (movieViewModel.isLoadedNowPlaying.not()) {
+                    movieViewModel.getNowPlayingMovies().collect { state ->
+                        movieViewModel.handleStateNowPlayingMovies(state)
+                    }
                 }
             }
             MovieList(movies = nowPlayingMovies, onMovieClick = { movie ->
