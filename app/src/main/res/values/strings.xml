@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoviesDB Application</string>
+    <string name="label_unkonwn_error">Unknown error occurred</string>
+    <string name="label_no_internet_connection">No Internet connection</string>
 </resources>

@@ -24,16 +24,4 @@ class RequestInterceptor(
         return chain.proceed(newRequest)
     }
 
-//    private fun getNewToken(): AuthenticationServices {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-//        val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl(BuildConfig.API_BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .client(okHttpClient)
-//            .build()
-//        return retrofit.create(AuthenticationServices::class.java)
-//    }
 }
