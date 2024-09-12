@@ -9,8 +9,8 @@ import androidx.compose.ui.unit.dp
 import com.example.moviesdbapplication.data.remote.model.ResultResponse
 
 @Composable
-fun MovieList(movies: List<ResultResponse>, onMovieClick: (ResultResponse) -> Unit) {
-    LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
+fun MovieList(movies: List<ResultResponse>, onMovieClick: (Int) -> Unit) {
+    LazyColumn(modifier = Modifier.padding(top = 60.dp)) {
         items(movies) { movie ->
             MovieItem(movie, onMovieClick = onMovieClick)
         }

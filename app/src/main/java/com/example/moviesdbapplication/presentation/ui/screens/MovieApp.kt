@@ -20,22 +20,9 @@ import com.example.moviesdbapplication.utils.Constants.Movies.TAB_MOVIES_UPCOMIN
 @Composable
 fun MovieApp(movieViewModel: MovieViewModel = hiltViewModel()) {
     val selectedTabIndex by movieViewModel.selectedTabIndex.collectAsState()
-
-    val tabTitles = listOf(
-        TAB_MOVIES_UPCOMING, TAB_MOVIES_POPULAR, TAB_MOVIES_NOW_PLAYING
-    )
     val navController = rememberNavController()
 
     Scaffold(
-        topBar = {
-            TabRow(selectedTabIndex = selectedTabIndex) {
-                tabTitles.forEachIndexed { index, title ->
-                    Tab(selected = selectedTabIndex == index,
-                        onClick = { movieViewModel.onTabSelected(index) },
-                        text = { Text(text = title) })
-                }
-            }
-        }
     ) { padding ->
         NavHost(
             navController = navController,
@@ -49,12 +36,13 @@ fun MovieApp(movieViewModel: MovieViewModel = hiltViewModel()) {
                     navController = navController
                 )
             }
+
             composable(
                 route = "movieDetails/{movieId}",
                 arguments = listOf(navArgument("movieId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val movieId = backStackEntry.arguments?.getInt("movieId") ?: return@composable
-                MovieDetailsScreen(movieViewModel = movieViewModel, movieId = movieId)
+                MovieDetailsScreen(movieViewModel = movieViewModel, movieId = movieId,navController)
             }
         }
     }

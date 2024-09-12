@@ -21,12 +21,12 @@ import com.example.moviesdbapplication.data.remote.model.ResultResponse
 import com.example.moviesdbapplication.utils.Constants.URL.URL_IMAGE
 
 @Composable
-fun MovieItem(movie: ResultResponse, onMovieClick: (ResultResponse) -> Unit) {
+fun MovieItem(movie: ResultResponse, onMovieClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .clickable { onMovieClick(movie) },
+            .clickable { onMovieClick(movie.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFF7F2F9),
