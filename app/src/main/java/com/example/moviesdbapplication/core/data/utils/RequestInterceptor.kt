@@ -1,14 +1,7 @@
 package com.example.moviesdbapplication.core.data.utils
 
-import android.util.Log
-import com.example.moviesdbapplication.utils.SharedPrefs
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RequestInterceptor(
 ) : Interceptor {

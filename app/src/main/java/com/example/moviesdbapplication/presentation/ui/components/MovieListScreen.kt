@@ -21,7 +21,7 @@ fun MovieListScreen(
     val popularMovies by movieViewModel.popularMoviesList.collectAsState()
     val nowPlayingMovies by movieViewModel.nowPlayingMoviesList.collectAsState()
     val isLoading by movieViewModel.isLoading.collectAsState()
-    val isError by movieViewModel.errorMessage.collectAsState()
+    val isError by movieViewModel.errorCode.collectAsState()
 
     val tabTitles = listOf(
         Constants.Movies.TAB_MOVIES_UPCOMING,
@@ -72,8 +72,8 @@ fun MovieListScreen(
     isLoading.takeIf { it }?.let {
         LoadingState()
     }
-    isError.takeIf { it.isNotEmpty() }?.let {
-        ErrorState(message = it)
+    isError.takeIf { it != 200 }?.let {
+        ErrorState()
     }
 
 

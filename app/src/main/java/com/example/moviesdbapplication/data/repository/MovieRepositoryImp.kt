@@ -21,12 +21,11 @@ class MovieRepositoryImp @Inject constructor(
             if (response.isSuccessful) {
                 val body = response.body()!!
                 emit(BaseResult.DataState(body))
-            } else {
-                val type = object : TypeToken<MovieResponse>() {}.type
-                val err: WrappedResponse<MovieResponse> =
-                    Gson().fromJson(response.errorBody()!!.charStream(), type)
-                err.code = response.code()
-                emit(BaseResult.ErrorState(err.code, err.details))
+            }  else {
+                val errorBody = response.errorBody()?.charStream()
+                val type = object : TypeToken<WrappedResponse<MovieResponse>>() {}.type
+                val errorResponse: WrappedResponse<MovieResponse> = Gson().fromJson(errorBody, type)
+                emit(BaseResult.ErrorState(response.code()))
             }
         }    }
 
@@ -37,11 +36,10 @@ class MovieRepositoryImp @Inject constructor(
                 val body = response.body()!!
                 emit(BaseResult.DataState(body))
             } else {
-                val type = object : TypeToken<MovieResponse>() {}.type
-                val err: WrappedResponse<MovieResponse> =
-                    Gson().fromJson(response.errorBody()!!.charStream(), type)
-                err.code = response.code()
-                emit(BaseResult.ErrorState(err.code, err.details))
+                val errorBody = response.errorBody()?.charStream()
+                val type = object : TypeToken<WrappedResponse<MovieResponse>>() {}.type
+                val errorResponse = Gson().fromJson<WrappedResponse<MovieResponse>>(errorBody, type)
+                emit(BaseResult.ErrorState(response.code()))
             }
         }    }
 
@@ -52,11 +50,10 @@ class MovieRepositoryImp @Inject constructor(
                 val body = response.body()!!
                 emit(BaseResult.DataState(body))
             } else {
-                val type = object : TypeToken<MovieResponse>() {}.type
-                val err: WrappedResponse<MovieResponse> =
-                    Gson().fromJson(response.errorBody()!!.charStream(), type)
-                err.code = response.code()
-                emit(BaseResult.ErrorState(err.code, err.details))
+                val errorBody = response.errorBody()?.charStream()
+                val type = object : TypeToken<WrappedResponse<MovieResponse>>() {}.type
+                val errorResponse = Gson().fromJson<WrappedResponse<MovieResponse>>(errorBody, type)
+                emit(BaseResult.ErrorState(response.code()))
             }
         }    }
 

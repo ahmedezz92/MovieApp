@@ -1,10 +1,6 @@
 package com.example.moviesdbapplication.presentation.ui.screens
 
-import android.widget.Toast
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.moviesdbapplication.R
 import com.example.moviesdbapplication.base.BaseResult
 import com.example.moviesdbapplication.data.remote.model.MovieResponse
 import com.example.moviesdbapplication.data.remote.model.ResultResponse
@@ -14,14 +10,10 @@ import com.example.moviesdbapplication.domain.usecase.GetUpcomingMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,8 +60,8 @@ class MovieViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     /*error messages*/
-    private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> = _errorMessage
+    private val _errorCode = MutableStateFlow(200)
+    val errorCode: StateFlow<Int> = _errorCode
     private fun setLoading() {
         _isLoading.value = true
     }
@@ -87,8 +79,7 @@ class MovieViewModel @Inject constructor(
                 hideLoading()
                 emit(
                     GetMoviesActivityState.Error(
-                        errorCode = -1,
-                        errorMessage = error.message ?: "Unknown error occurred"
+                        errorCode = -1
                     )
                 )
             }
@@ -97,7 +88,7 @@ class MovieViewModel @Inject constructor(
                 when (result) {
                     is BaseResult.ErrorState -> {
                         val errorState =
-                            GetMoviesActivityState.Error(result.errorCode, result.errorMessage)
+                            GetMoviesActivityState.Error(result.errorCode)
                         _upcomingMoviesState.value = errorState
                         emit(errorState)
                     }
@@ -108,7 +99,7 @@ class MovieViewModel @Inject constructor(
                             _upcomingMoviesState.value = successState
                             _upcomingMoviesList.value = successState.data.results
                             emit(successState)
-                        } ?: emit(GetMoviesActivityState.Error(-1, "No movies data"))
+                        } ?: emit(GetMoviesActivityState.Error(-1))
                     }
                 }
             }
@@ -123,8 +114,7 @@ class MovieViewModel @Inject constructor(
                 hideLoading()
                 emit(
                     GetMoviesActivityState.Error(
-                        errorCode = -1,
-                        errorMessage = error.message ?: "Unknown error occurred"
+                        errorCode = -1
                     )
                 )
             }
@@ -133,7 +123,7 @@ class MovieViewModel @Inject constructor(
                 when (result) {
                     is BaseResult.ErrorState -> {
                         val errorState =
-                            GetMoviesActivityState.Error(result.errorCode, result.errorMessage)
+                            GetMoviesActivityState.Error(result.errorCode)
                         _upcomingMoviesState.value = errorState
                         emit(errorState)
                     }
@@ -144,7 +134,7 @@ class MovieViewModel @Inject constructor(
                             _popularMoviesState.value = successState
                             _popularMoviesList.value = successState.data.results
                             emit(successState)
-                        } ?: emit(GetMoviesActivityState.Error(-1, "No movies data"))
+                        } ?: emit(GetMoviesActivityState.Error(-1))
                     }
                 }
             }
@@ -159,8 +149,7 @@ class MovieViewModel @Inject constructor(
                 hideLoading()
                 emit(
                     GetMoviesActivityState.Error(
-                        errorCode = -1,
-                        errorMessage = error.message ?: "Unknown error occurred"
+                        errorCode = -1
                     )
                 )
             }
@@ -169,7 +158,7 @@ class MovieViewModel @Inject constructor(
                 when (result) {
                     is BaseResult.ErrorState -> {
                         val errorState =
-                            GetMoviesActivityState.Error(result.errorCode, result.errorMessage)
+                            GetMoviesActivityState.Error(result.errorCode)
                         _nowPlayingMoviesState.value = errorState
                         emit(errorState)
                     }
@@ -180,7 +169,7 @@ class MovieViewModel @Inject constructor(
                             _nowPlayingMoviesState.value = successState
                             _nowPlayingMoviesList.value = successState.data.results
                             emit(successState)
-                        } ?: emit(GetMoviesActivityState.Error(-1, "No movies data"))
+                        } ?: emit(GetMoviesActivityState.Error(-1))
                     }
                 }
             }
@@ -204,13 +193,13 @@ class MovieViewModel @Inject constructor(
             }
 
             is GetMoviesActivityState.Error -> {
-                _errorMessage.value = state.errorMessage
+                _errorCode.value = state.errorCode
 
             }
 
             is GetMoviesActivityState.ShowToast -> {
                 if (state.isConnectionError)
-                    _errorMessage.value = state.message
+                    _errorCode.value = state.code
             }
         }
     }
@@ -234,13 +223,13 @@ class MovieViewModel @Inject constructor(
             }
 
             is GetMoviesActivityState.Error -> {
-                _errorMessage.value = state.errorMessage
+                _errorCode.value = state.errorCode
 
             }
 
             is GetMoviesActivityState.ShowToast -> {
                 if (state.isConnectionError)
-                    _errorMessage.value = state.message
+                    _errorCode.value = state.code
             }
         }
     }
@@ -266,13 +255,13 @@ class MovieViewModel @Inject constructor(
             }
 
             is GetMoviesActivityState.Error -> {
-                _errorMessage.value = state.errorMessage
+                _errorCode.value = state.errorCode
 
             }
 
             is GetMoviesActivityState.ShowToast -> {
                 if (state.isConnectionError)
-                    _errorMessage.value = state.message
+                    _errorCode.value = state.code
             }
         }
     }
@@ -292,13 +281,13 @@ class MovieViewModel @Inject constructor(
     sealed class GetMoviesActivityState {
         object Init : GetMoviesActivityState()
         data class IsLoading(val isLoading: Boolean) : GetMoviesActivityState()
-        data class ShowToast(val message: String, val isConnectionError: Boolean) :
+        data class ShowToast(val code: Int, val isConnectionError: Boolean) :
             GetMoviesActivityState()
 
         data class Success(val data: MovieResponse) :
             GetMoviesActivityState()
 
-        data class Error(val errorCode: Int, val errorMessage: String) :
+        data class Error(val errorCode: Int) :
             GetMoviesActivityState()
     }
 }

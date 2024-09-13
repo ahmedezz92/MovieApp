@@ -42,7 +42,7 @@ fun LoadingState() {
 
 
 @Composable
-fun ErrorState(message: String) {
+fun ErrorState() {
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -55,6 +55,9 @@ fun ErrorState(message: String) {
                 Toast.LENGTH_SHORT
             ).show()
         else
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context, stringResource(id = R.string.label_unknown_error),
+                Toast.LENGTH_SHORT
+            ).show()
     }
 }
