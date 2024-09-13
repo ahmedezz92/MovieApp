@@ -1,7 +1,7 @@
 package com.example.moviesdbapplication.data.repository
 
 import com.example.moviesdbapplication.base.BaseResult
-import com.example.moviesdbapplication.core.WrappedResponse
+import com.example.moviesdbapplication.core.data.utils.WrappedResponse
 import com.example.moviesdbapplication.data.remote.api.MovieApiService
 import com.example.moviesdbapplication.data.remote.model.MovieResponse
 import com.example.moviesdbapplication.domain.repository.MovieRepository

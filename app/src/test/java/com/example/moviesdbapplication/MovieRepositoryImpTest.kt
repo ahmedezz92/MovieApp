@@ -1,13 +1,12 @@
 package com.example.moviesdbapplication
 
 import com.example.moviesdbapplication.base.BaseResult
-import com.example.moviesdbapplication.core.WrappedResponse
+import com.example.moviesdbapplication.core.data.utils.WrappedResponse
 import com.example.moviesdbapplication.data.remote.api.MovieApiService
 import com.example.moviesdbapplication.data.repository.MovieRepositoryImp
 import com.example.moviesdbapplication.data.remote.model.MovieResponse
 import com.example.moviesdbapplication.data.remote.model.ResultResponse
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals

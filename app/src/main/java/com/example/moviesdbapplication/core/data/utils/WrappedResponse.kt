@@ -1,6 +1,5 @@
-package com.example.moviesdbapplication.core
+package com.example.moviesdbapplication.core.data.utils
 
-import android.graphics.pdf.PdfDocument.Page
 import com.google.gson.annotations.SerializedName
 
 data class WrappedResponse<T>(
